@@ -32,4 +32,4 @@ jobs:
         echo "::set-output name=image::$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG"
     - name: Update Lambda function
       run: |
-        aws lambda update-function-code --function-name docker-lambda-function --image-uri 207525721899.dkr.ecr.us-east-1.amazonaws.com/docker-lambda:$IMAGE_TAG
+        aws lambda update-function-code --function-name docker-lambda-function --image-uri 207525721899.dkr.ecr.us-east-1.amazonaws.com/docker-lambda:latest
