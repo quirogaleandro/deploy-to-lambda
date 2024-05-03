@@ -9,7 +9,7 @@ export const handler = async (
   return {
     statusCode: 200,
     body: JSON.stringify({
-      message: 'Running this handler from docker',
+      message: 'Running this handler from docker Lambda VS CODE',
     }),
   };
 };
