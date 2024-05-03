@@ -30,16 +30,10 @@ jobs:
         docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
         docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
         echo "::set-output name=image::$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG"
-    - name: Wait for image to be available in ECR
-      run: |
-        while true; do
-          if aws ecr describe-images --repository-name docker-lambda --image-ids imageTag=$IMAGE_TAG --output text | grep -q "imageManifest"; then
-            break
-          else
-            echo "Waiting for image to be available in ECR..."
-            sleep 10
-          fi
-        done
     - name: Update Lambda function
+      env:
+        ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+        ECR_REPOSITORY: docker-lambda
+        IMAGE_TAG: ${{ github.run_number }}-${{ github.sha }}
       run: |
         aws lambda update-function-code --function-name docker-lambda-function --image-uri $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
